@@ -1,0 +1,42 @@
+Linux 64 bit build for both HTML 5 and Native:
+
+== HTML5 setup: *emscripten on debian linux* ==
+
+
+The default Debian (jessie) version fails due to not having fastcomp
+thus we will need to build a version with it enabled
+
+Prerequisite: this will require the Debian version of node.js installed
+
+1) Download https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz
+2) Extract into its own folder (ideally a directory above your minko install)
+3) in that directory run
+
+   `./emsdk update` to fetch the project list
+   `./emsdk list` to show the projects list
+   `./emsdk install <name>` to install a project (see note)
+   `./emsdk activate <name>` to activate a project (see note)
+   
+   Run update, and list as above, then run install/activate for each of the
+   following clang-master-64bit, emscripten-master, clang-master-64bit
+4) I also needed to edit ~/.emscripten and change NODE_JS = 'nodejs'
+5) TO configure the build the EMSCRIPTEN environment variable must be set to
+   this SDK directory: run `export EMSCRIPTEN=$PWD/emscripten/master/`
+
+
+== HTML Overlay ==
+
+To have the overlay work on linux download and place the files as
+described in plugin/html-overlay/lib/linux64/README.txt
+
+== Building ==
+
+After ensuring the EMSCRIPTEN environment variable is set as above
+
+1) run `tool/lin/script/solution_gmake_clang.sh` 
+   (optionally solution_gmake_gcc.sh)
+2) build `make config=release config=linux64_release -j 5` 
+   (the -j5 is the thread count, and ought to be number of CPU cores -1)
+   this builds the linux version of the engine
+3) build `make config=release config=html5_release -j 5`
+   this one builds the html5 version
