@@ -83,6 +83,11 @@ main(int argc, char** argv)
         root->addChild(objModel);
         root->addChild(daeModel);
 
+        auto ambientLightNode = scene::Node::create("ambientLight")
+            ->addComponent(AmbientLight::create(0.5f));
+
+        root->addChild(ambientLightNode);
+
         auto enterFrame = canvas->enterFrame()->connect([&](Canvas::Ptr canvas, float t, float dt)
         {
             sceneManager->nextFrame(t, dt);
